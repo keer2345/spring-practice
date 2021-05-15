@@ -1,5 +1,7 @@
 package com.keer.spring.securityBasics;
 
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,17 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+  @Autowired DataSource dataSource;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    // Set your configuratioin on the auth object
-    auth.inMemoryAuthentication()
-        .withUser("keer")
-        .password("keer")
-        .roles("USER")
-        .and()
-        .withUser("foo")
-        .password("foo")
-        .roles("ADMIN");
+    auth.jdbcAuthentication()
+        .dataSource(dataSource);
+//        .usersByUsernameQuery("select username, password, enabled from users where username = ?")
+//        .authoritiesByUsernameQuery(
+//            "select username, authority from authorities where username = ?");
   }
 
   @Bean
@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .hasRole("ADMIN")
         .antMatchers("/user")
         .hasAnyRole("USER", "ADMIN")
-        .antMatchers("/")
+        .antMatchers("/","/h2")
         .permitAll()
         .and()
         .formLogin();
