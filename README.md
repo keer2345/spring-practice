@@ -1,1 +1,1 @@
-- [Spring Security Basics](blob/main/spring-basics)
+- [Spring Security Basics](tree/main/spring-basics)
