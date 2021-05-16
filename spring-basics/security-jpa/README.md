@@ -41,9 +41,9 @@ spring.jpa.show-sql= true
 
 ## Java
 **Add new Java files**:
-- `src/main/java/com/keer/spring/securityJpa/SecurityConfiguration.java`
-- `src/main/java/com/keer/spring/securityJpa/controller/HomeController.java`
 - `src/main/java/com/keer/spring/securityJpa/entity/User.java`
+- `src/main/java/com/keer/spring/securityJpa/controller/HomeController.java`
+- `src/main/java/com/keer/spring/securityJpa/SecurityConfiguration.java`
 - `src/main/java/com/keer/spring/securityJpa/repository/UserRepository.java`
 - `src/main/java/com/keer/spring/securityJpa/security/MyUserDetails.java`
 - `src/main/java/com/keer/spring/securityJpa/security/MyUserDetailsService.java`
