@@ -159,3 +159,31 @@ public class ProjectConfig {
   }
 }
 ```
+
+## Overriding the endpoint authorization configuration
+
+Using the HttpSecurity parameter to alter the configuration:
+
+``` java
+@Configuration
+public class ProjectConfig extends WebSecurityConfigurerAdapter {
+
+  // ...
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic();
+    http.authorizeRequests().anyRequest().authenticated();
+  }
+}
+```
+
+With a slight change, you can make all the endpoints accessible without the need for credentials:
+
+``` java
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+  http.httpBasic();
+  http.authorizeRequests().anyRequest().permitAll();
+}
+```
