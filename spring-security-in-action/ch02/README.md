@@ -289,3 +289,118 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
 Generally, I don’t recommend this approach, as I find it better to separate and write
 responsibilities as decoupled as possible in an application.
+
+## Overriding the AuthenticationProvider implementation
+
+As you’ve already observed, Spring Security components provide a lot of flexibility, which offers us
+a lot of options when adapting these to the architecture of our applications. Up to now, you’ve
+learned the purpose of `UserDetailsService` and `PasswordEncoder` in the Spring Security
+architecture. And you saw a few ways to configure them. It’s time to learn that you can also
+customize the component that delegates to these, the `AuthenticationProvider`.
+
+Implementing the `AuthenticationProvider` interface:
+
+``` java
+package com.spring.securityInAction.ch02.security;
+
+// import ...
+
+@Component
+public class CustomAuthenticationProvider implements AuthenticationProvider {
+
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    String username = authentication.getName();
+    String password = String.valueOf(authentication.getCredentials());
+
+    if ("john".equals(username) && "123456".equals(password)) {
+      return new UsernamePasswordAuthenticationToken(username, password, Arrays.asList());
+    } else {
+      throw new AuthenticationCredentialsNotFoundException("Error in authentication!");
+    }
+  }
+
+  @Override
+  public boolean supports(Class<?> authenticationType) {
+    return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authenticationType);
+  }
+}
+```
+
+``` java
+package com.spring.securityInAction.ch02.config;
+
+// import ...
+
+@Configuration
+public class ProjectConfig extends WebSecurityConfigurerAdapter {
+  @Autowired private CustomAuthenticationProvider authenticationProvider;
+
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.authenticationProvider(authenticationProvider);
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic();
+    http.authorizeRequests().anyRequest().authenticated();
+  }
+}
+```
+
+Run and try it:
+
+``` shell
+mvn spring-boot:run
+```
+
+## Using multiple configuration classes in your project
+
+In a production-ready application, you probably have more declarations than in our first examples.
+You also might find it useful to have more than one configuration class to make the project
+readable.
+
+It’s always a good practice to have only one class per each responsibility. For this example, we can
+separate user management configuration from authorization configuration.
+
+``` java
+package com.spring.securityInAction.ch02.config;
+
+// import ...
+
+@Configuration
+public class UserManagementConfig {
+  @Bean
+  public UserDetailsService userDetailsService() {
+    var userDetailsService = new InMemoryUserDetailsManager();
+
+    var user = User.withUsername("john").password("123456").authorities("read").build();
+    userDetailsService.createUser(user);
+    return userDetailsService;
+  }
+
+  @Bean
+  @Deprecated
+  public PasswordEncoder passwordEncoder() {
+    return NoOpPasswordEncoder.getInstance();
+  }
+}
+```
+
+``` java
+package com.spring.securityInAction.ch02.config;
+
+// import ...
+
+@Configuration
+public class WebAuthorizationConfig extends WebSecurityConfigurerAdapter {
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic();
+    http.authorizeRequests().anyRequest().authenticated();
+  }
+}
+```
+
+# Summary
