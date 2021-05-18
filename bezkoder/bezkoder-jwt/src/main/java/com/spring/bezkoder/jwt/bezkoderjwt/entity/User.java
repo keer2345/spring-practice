@@ -1,4 +1,4 @@
-package com.spring.bezkoder.jwt.bezkoderjwt.entity.audit;
+package com.spring.bezkoder.jwt.bezkoderjwt.entity;
 
 import com.spring.bezkoder.jwt.bezkoderjwt.entity.Role;
 
