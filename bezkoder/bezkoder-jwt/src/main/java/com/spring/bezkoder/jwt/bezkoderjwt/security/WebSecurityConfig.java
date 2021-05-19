@@ -4,6 +4,7 @@ import com.spring.bezkoder.jwt.bezkoderjwt.security.jwt.AuthEntryPointJwt;
 import com.spring.bezkoder.jwt.bezkoderjwt.security.jwt.AuthTokenFilter;
 import com.spring.bezkoder.jwt.bezkoderjwt.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
+    /**
+     * provides AOP security on methods. It enables @PreAuthorize, @PostAuthorize, it also supports
+     * JSR-250. You can find more parameters in configuration in [Method Security
+     * Expressions](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#method-security-expressions).
+     */
     // securedEnabled = true,
     // jsr250Enabled = true,
     prePostEnabled = true)
@@ -26,10 +32,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired private UserDetailsServiceImpl userDetailsService;
   @Autowired private AuthEntryPointJwt unauthorizedHandler;
 
+  @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
 
+  @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
@@ -39,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
+  @Bean
   @Override
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
