@@ -20,11 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-    /**
-     * provides AOP security on methods. It enables @PreAuthorize, @PostAuthorize, it also supports
-     * JSR-250. You can find more parameters in configuration in [Method Security
-     * Expressions](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#method-security-expressions).
-     */
     // securedEnabled = true,
     // jsr250Enabled = true,
     prePostEnabled = true)
