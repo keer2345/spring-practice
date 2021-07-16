@@ -6,4 +6,5 @@
 
 1. [Security Today](ch01/README.md)
 1. [Hello Spring Security](ch02/README.md)
+1. [Managing users](ch03/README.md)
 

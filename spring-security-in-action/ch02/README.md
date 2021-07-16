@@ -3,6 +3,16 @@
 
 > kBuCA5An <> sharklasers.com / 123456
 
+- [Starting with the first project](#starting-with-the-first-project)
+- [Which are the default configurations?](#which-are-the-default-configurations)
+- [Overriding default configurations](#overriding-default-configurations)
+  - [Overriding the UserDetailsService component](#overriding-the-userdetailsservice-component)
+  - [Overriding the endpoint authorization configuration](#overriding-the-endpoint-authorization-configuration)
+  - [Setting the configuration in different ways](#setting-the-configuration-in-different-ways)
+  - [Overriding the AuthenticationProvider implementation](#overriding-the-authenticationprovider-implementation)
+  - [Using multiple configuration classes in your project](#using-multiple-configuration-classes-in-your-project)
+- [Summary](#summary)
+
 # Starting with the first project
 
 Spring Security dependencies for our first web app:
@@ -131,7 +141,7 @@ ispatcherServlet] in context with path [] threw exception
 
 java.lang.IllegalArgumentException: There is no PasswordEncoder mapped for the id "null"
 	at org.springframework.security.crypto.password.DelegatingPasswordEncoder$
-	UnmappedIdPasswordEncoder.matches(DelegatingPasswordEncoder.java:254) 
+	UnmappedIdPasswordEncoder.matches(DelegatingPasswordEncoder.java:254)
 	~[spring-security-core-5.5.0-SNAPSHOT.jar:5.5.0-SNAPSHOT]
 ```
 
